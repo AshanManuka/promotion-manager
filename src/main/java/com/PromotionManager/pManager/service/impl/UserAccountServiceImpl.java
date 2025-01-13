@@ -1,6 +1,7 @@
 package com.PromotionManager.pManager.service.impl;
 
 import com.PromotionManager.pManager.dto.common.CommonResponse;
+import com.PromotionManager.pManager.dto.userDto.FullUserAccountResDto;
 import com.PromotionManager.pManager.dto.userDto.UserAccountReqDto;
 import com.PromotionManager.pManager.dto.userDto.UserAccountResDto;
 import com.PromotionManager.pManager.entity.User;
@@ -12,11 +13,15 @@ import com.PromotionManager.pManager.service.UserAccountService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,6 +32,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     private final UserRepository userRepository;
     private final UserAccountRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     @Override
     public ResponseEntity<?> createUserAccount(UserAccountReqDto reqDto) {
@@ -67,6 +73,12 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     }
 
+    @Override
+    public ResponseEntity<?> getAllUsers() {
+        log.info("Getting all account list");
+        List<FullUserAccountResDto> responseList = userAccountRepository.getAllAccounts();
+        return ResponseEntity.ok(new CommonResponse<>(true, responseList));
+    }
 
 
 }

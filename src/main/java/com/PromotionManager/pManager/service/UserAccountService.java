@@ -8,4 +8,6 @@ import org.springframework.http.ResponseEntity;
 public interface UserAccountService {
 
     ResponseEntity<?> createUserAccount(UserAccountReqDto reqDto);
+
+    ResponseEntity<?> getAllUsers();
 }
