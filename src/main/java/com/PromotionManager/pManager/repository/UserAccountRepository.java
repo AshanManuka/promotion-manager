@@ -16,4 +16,6 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Long> 
             "FROM UserAccount ua JOIN ua.user u")
     List<FullUserAccountResDto> getAllAccounts();
 
+    @Query("SELECT ua FROM UserAccount ua JOIN ua.user u WHERE u.username=?1")
+    UserAccount findByUserName(String userName);
 }
