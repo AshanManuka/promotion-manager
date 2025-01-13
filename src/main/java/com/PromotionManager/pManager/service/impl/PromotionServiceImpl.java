@@ -1,7 +1,8 @@
 package com.PromotionManager.pManager.service.impl;
 
-import com.PromotionManager.pManager.dto.PromotionReqDto;
+import com.PromotionManager.pManager.dto.promotion.PromotionReqDto;
 import com.PromotionManager.pManager.dto.common.CommonResponse;
+import com.PromotionManager.pManager.dto.promotion.PromotionResDto;
 import com.PromotionManager.pManager.entity.Promotion;
 import com.PromotionManager.pManager.entity.UserAccount;
 import com.PromotionManager.pManager.repository.PromotionRepository;
@@ -9,11 +10,14 @@ import com.PromotionManager.pManager.repository.UserAccountRepository;
 import com.PromotionManager.pManager.service.PromotionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +26,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     private final PromotionRepository promotionRepository;
     private final UserAccountRepository userAccountRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public ResponseEntity<?> createPromotion(PromotionReqDto reqDto, String userName) throws IOException {
@@ -49,6 +54,30 @@ public class PromotionServiceImpl implements PromotionService {
                 return ResponseEntity.ok(new CommonResponse<>(true, "Promotion Saved Successfully!"));
             }
         }
+    }
+
+    @Override
+    public ResponseEntity<?> getAllPromotionsByUser(String userName) {
+        UserAccount userAccount = findUserByUserName(userName);
+
+        if(userAccount == null){
+            log.info("user not found");
+            return ResponseEntity.ok(new CommonResponse<>(false, "User not Found"));
+        }else{
+            List<Promotion> promotionList = promotionRepository.getPromotionByUserId(userAccount.getId());
+            if(promotionList.isEmpty()){
+                log.info("promotions not found");
+                return ResponseEntity.ok(new CommonResponse<>(false, "promotions not Found"));
+            }
+
+
+            List<PromotionResDto> responseList = promotionList.stream()
+                    .map(promotion -> modelMapper.map(promotion, PromotionResDto.class))
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(new CommonResponse<>(true, responseList));
+        }
+
     }
 
 

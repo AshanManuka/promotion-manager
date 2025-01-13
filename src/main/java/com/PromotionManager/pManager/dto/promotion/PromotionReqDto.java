@@ -1,4 +1,4 @@
-package com.PromotionManager.pManager.dto;
+package com.PromotionManager.pManager.dto.promotion;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;

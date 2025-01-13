@@ -1,13 +1,11 @@
 package com.PromotionManager.pManager.controller.user;
 
-import com.PromotionManager.pManager.dto.PromotionReqDto;
-import com.PromotionManager.pManager.dto.userDto.UserAccountReqDto;
+import com.PromotionManager.pManager.dto.promotion.PromotionReqDto;
 import com.PromotionManager.pManager.service.PromotionService;
 import com.PromotionManager.pManager.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -29,10 +27,11 @@ public class PromotionController {
         return promotionService.createPromotion(reqDto, userName);
     }
 
-    @PostMapping("/promotion")
-    public ResponseEntity<?> getAllPromotions(@RequestHeader("Authorization") String headerToken){
+    @GetMapping("/promotions-by-user")
+    public ResponseEntity<?> getAllPromotionsByUser(@RequestHeader("Authorization") String headerToken){
         String userName = getUserNameByToken(headerToken);
-        return ResponseEntity.ok(userName);
+        log.info("load all promotion by User: {}",userName);
+        return promotionService.getAllPromotionsByUser(userName);
     }
 
 
