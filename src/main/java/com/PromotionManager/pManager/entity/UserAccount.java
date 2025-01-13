@@ -3,7 +3,9 @@ package com.PromotionManager.pManager.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -27,5 +29,9 @@ public class UserAccount {
     @ToString.Exclude
     @OneToOne(mappedBy = "userAccount", cascade = CascadeType.ALL, orphanRemoval = true)
     private User user;
+
+    @OneToMany(mappedBy = "user")
+    @ToString.Exclude
+    private List<Promotion> promotions = new ArrayList<>();
 
 }

@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 public class AuthenticationController {
 
@@ -31,8 +34,14 @@ public class AuthenticationController {
         );
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authReq.getUsername());
-        final String jwt = jwtUtil.generateToken(userDetails);
+
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(authority -> authority.getAuthority())
+                .collect(Collectors.toList());
+
+        final String jwt = jwtUtil.generateToken(userDetails, roles);
 
         return jwt;
     }
+
 }

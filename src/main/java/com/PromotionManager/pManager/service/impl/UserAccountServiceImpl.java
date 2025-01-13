@@ -124,14 +124,12 @@ public class UserAccountServiceImpl implements UserAccountService {
         }
 
         Optional<UserAccount> tempUserAccount = userAccountRepository.findById(userId);
-
         if (tempUserAccount.isEmpty()) {
             log.info("User not found");
             return ResponseEntity.ok(new CommonResponse<>(false, "User not Found"));
         }
 
         UserAccount userAccount = tempUserAccount.get();
-
         User user = userAccount.getUser();
         if (user != null) {
             userRepository.delete(user);
