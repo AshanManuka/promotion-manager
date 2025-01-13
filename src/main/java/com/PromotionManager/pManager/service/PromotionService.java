@@ -9,4 +9,8 @@ public interface PromotionService {
     ResponseEntity<?> createPromotion(PromotionReqDto reqDto, String userName) throws IOException;
 
     ResponseEntity<?> getAllPromotionsByUser(String userName);
+
+    ResponseEntity<?> updatePromotion(PromotionReqDto reqDto, Long promotionId, String userName) throws IOException;
+
+    ResponseEntity<?> deletePromotion(Long promotionId, String userName);
 }

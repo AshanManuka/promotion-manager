@@ -10,4 +10,7 @@ public interface PromotionRepository extends JpaRepository<Promotion, Long> {
 
     @Query("SELECT p FROM Promotion p WHERE p.user.id=?1")
     List<Promotion> getPromotionByUserId(Long id);
+
+    @Query("SELECT p FROM Promotion p WHERE p.id=?1")
+    Promotion getPromotionById(Long promotionId);
 }

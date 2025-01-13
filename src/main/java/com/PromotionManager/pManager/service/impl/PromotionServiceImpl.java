@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -78,6 +79,48 @@ public class PromotionServiceImpl implements PromotionService {
             return ResponseEntity.ok(new CommonResponse<>(true, responseList));
         }
 
+    }
+
+    @Override
+    public ResponseEntity<?> updatePromotion(PromotionReqDto reqDto, Long promotionId, String userName) throws IOException {
+        UserAccount userAccount = findUserByUserName(userName);
+
+        if(userAccount == null){
+            log.info("user not found");
+            return ResponseEntity.ok(new CommonResponse<>(false, "User not Found"));
+        }
+
+        Promotion promotion = promotionRepository.getPromotionById(promotionId);
+        if(promotion == null){
+            log.info("promotion not found");
+            return ResponseEntity.ok(new CommonResponse<>(false, "promotion not Found"));
+        }
+
+        promotion = modelMapper.map(reqDto, Promotion.class);
+        promotion.setBanner(reqDto.getBanner().getBytes());
+        promotion.setUpdatedDate(new Date());
+
+        promotionRepository.save(promotion);
+        return ResponseEntity.ok(new CommonResponse<>(true, "Promotion Updated Successfully"));
+    }
+
+    @Override
+    public ResponseEntity<?> deletePromotion(Long promotionId, String userName) {
+        UserAccount userAccount = findUserByUserName(userName);
+
+        if(userAccount == null){
+            log.info("user not found");
+            return ResponseEntity.ok(new CommonResponse<>(false, "User not Found"));
+        }
+
+        Promotion promotion = promotionRepository.getPromotionById(promotionId);
+        if(promotion == null){
+            log.info("promotion not found");
+            return ResponseEntity.ok(new CommonResponse<>(false, "promotion not Found"));
+        }
+
+        promotionRepository.delete(promotion);
+        return ResponseEntity.ok(new CommonResponse<>(true, "Promotion Delete Successfully"));
     }
 
 

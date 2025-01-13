@@ -27,6 +27,20 @@ public class PromotionController {
         return promotionService.createPromotion(reqDto, userName);
     }
 
+    @PostMapping("/update-promotion")
+    public ResponseEntity<?> updatePromotion(@ModelAttribute PromotionReqDto reqDto, @RequestParam Long promotionId, @RequestHeader("Authorization") String headerToken) throws IOException {
+        String userName = getUserNameByToken(headerToken);
+        log.info("update Promotion id :{} by User: {}", promotionId, userName);
+        return promotionService.updatePromotion(reqDto, promotionId, userName);
+    }
+
+    @DeleteMapping("/delete-promotion")
+    public ResponseEntity<?> deletePromotion(@RequestParam Long promotionId, @RequestHeader("Authorization") String headerToken) throws IOException {
+        String userName = getUserNameByToken(headerToken);
+        log.info("delete Promotion id :{} by User: {}", promotionId, userName);
+        return promotionService.deletePromotion(promotionId, userName);
+    }
+
     @GetMapping("/promotions-by-user")
     public ResponseEntity<?> getAllPromotionsByUser(@RequestHeader("Authorization") String headerToken){
         String userName = getUserNameByToken(headerToken);
