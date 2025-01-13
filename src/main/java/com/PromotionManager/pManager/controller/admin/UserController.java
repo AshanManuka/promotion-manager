@@ -32,5 +32,19 @@ public class UserController {
         return userAccountService.getAllUsers();
     }
 
+    @PostMapping("/update-user")
+    @Secured("ADMIN")
+    public ResponseEntity<?> updateUserAccount(@RequestBody UserAccountReqDto reqDto, @RequestParam Long userId){
+        log.info("Update req for user Account, userId: {}", userId);
+        return userAccountService.updateSingleUser(userId, reqDto);
+    }
+
+    @DeleteMapping("/delete-user")
+    @Secured("ADMIN")
+    public ResponseEntity<?> DeleteUserAccount(@RequestParam Long userId){
+        log.info("Delete req for user Account, userId: {}", userId);
+        return userAccountService.deleteUser(userId);
+    }
+
 
 }

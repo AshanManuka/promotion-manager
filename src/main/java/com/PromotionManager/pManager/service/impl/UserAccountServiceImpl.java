@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -79,6 +80,69 @@ public class UserAccountServiceImpl implements UserAccountService {
         List<FullUserAccountResDto> responseList = userAccountRepository.getAllAccounts();
         return ResponseEntity.ok(new CommonResponse<>(true, responseList));
     }
+
+    @Override
+    public ResponseEntity<?> updateSingleUser(Long userId, UserAccountReqDto reqDto) {
+        if(userId == null || reqDto == null){
+            log.info("Empty inputs");
+            return ResponseEntity.ok(new CommonResponse<>(false, "Empty Inputs"));
+
+        }else{
+            Optional<UserAccount> tempUserAccount = userAccountRepository.findById(userId);
+
+            if(tempUserAccount.isEmpty()){
+                log.info("User not found");
+                return ResponseEntity.ok(new CommonResponse<>(false, "User not Found"));
+            }else{
+                UserAccount userAccount = tempUserAccount.get();
+                User user = userAccount.getUser();
+
+                userAccount.setName(reqDto.getName());
+                userAccount.setEmail(reqDto.getEmail());
+                userAccount.setUpdatedDate(new Date());
+
+                    if (reqDto.getUserName() != null) {
+                        user.setUsername(reqDto.getUserName());
+                    }
+                    if (reqDto.getPassword() != null) {
+                        user.setPassword(passwordEncoder.encode(reqDto.getPassword()));
+                    }
+
+                userAccountRepository.save(userAccount);
+
+                log.info("User and UserAccount updated successfully");
+                return ResponseEntity.ok(new CommonResponse<>(true, "User updated successfully"));
+            }
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> deleteUser(Long userId) {
+        if (userId == null) {
+            log.info("Empty userId input");
+            return ResponseEntity.ok(new CommonResponse<>(false, "Empty Input"));
+        }
+
+        Optional<UserAccount> tempUserAccount = userAccountRepository.findById(userId);
+
+        if (tempUserAccount.isEmpty()) {
+            log.info("User not found");
+            return ResponseEntity.ok(new CommonResponse<>(false, "User not Found"));
+        }
+
+        UserAccount userAccount = tempUserAccount.get();
+
+        User user = userAccount.getUser();
+        if (user != null) {
+            userRepository.delete(user);
+        }
+
+        userAccountRepository.delete(userAccount);
+
+        log.info("User and userAccount deleted successfully");
+        return ResponseEntity.ok(new CommonResponse<>(true, "User deleted successfully"));
+    }
+
 
 
 }

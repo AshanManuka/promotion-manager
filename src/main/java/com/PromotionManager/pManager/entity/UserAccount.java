@@ -25,7 +25,7 @@ public class UserAccount {
     private Date updatedDate;
 
     @ToString.Exclude
-    @OneToOne(mappedBy = "userAccount")
+    @OneToOne(mappedBy = "userAccount", cascade = CascadeType.ALL, orphanRemoval = true)
     private User user;
 
 }

@@ -10,4 +10,8 @@ public interface UserAccountService {
     ResponseEntity<?> createUserAccount(UserAccountReqDto reqDto);
 
     ResponseEntity<?> getAllUsers();
+
+    ResponseEntity<?> updateSingleUser(Long userId, UserAccountReqDto reqDto);
+
+    ResponseEntity<?> deleteUser(Long userId);
 }
