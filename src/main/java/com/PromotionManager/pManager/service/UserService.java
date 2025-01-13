@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserService{
 
     @Autowired
     private UserRepository userRepository;
@@ -20,10 +20,11 @@ public class UserService {
         User user = User.builder()
                 .username(reqDto.getUserName())
                 .password(passwordEncoder.encode(reqDto.getPassword()))
-                .role(Role.ADMIN)
+                .role("ADMIN")
                 .build();
         return userRepository.save(user);
     }
+
 
     public User findByUserName(String username){
         return userRepository.findByUsername(username);
