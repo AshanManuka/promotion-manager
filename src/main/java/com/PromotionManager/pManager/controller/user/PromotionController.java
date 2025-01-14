@@ -48,7 +48,12 @@ public class PromotionController {
         return promotionService.getAllPromotionsByUser(userName);
     }
 
-
+    @GetMapping("/single-promotion-by-user")
+    public ResponseEntity<?> getSinglePromotionsByUser(@RequestHeader("Authorization") String headerToken, Long promotionId){
+        String userName = getUserNameByToken(headerToken);
+        log.info("load single promotion by User: {}, promoId: {}",userName, promotionId);
+        return promotionService.getSinglePromotionsByUser(userName,promotionId);
+    }
 
 
     private String getUserNameByToken(String tokenHeader){
