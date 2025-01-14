@@ -14,4 +14,6 @@ public interface UserAccountService {
     ResponseEntity<?> updateSingleUser(Long userId, UserAccountReqDto reqDto);
 
     ResponseEntity<?> deleteUser(Long userId);
+
+    ResponseEntity<?> getSingleUser(Long userId);
 }

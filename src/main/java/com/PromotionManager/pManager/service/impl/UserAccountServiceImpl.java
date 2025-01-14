@@ -141,6 +141,17 @@ public class UserAccountServiceImpl implements UserAccountService {
         return ResponseEntity.ok(new CommonResponse<>(true, "User deleted successfully"));
     }
 
+    @Override
+    public ResponseEntity<?> getSingleUser(Long userId) {
+        if(userId == null){
+            log.info("Empty inputs");
+            return ResponseEntity.ok(new CommonResponse<>(false, "Empty Inputs"));
+        }
+
+        FullUserAccountResDto userResponse = userAccountRepository.getSingleUser(userId);
+        return ResponseEntity.ok(new CommonResponse<>(true,userResponse));
+
+    }
 
 
 }

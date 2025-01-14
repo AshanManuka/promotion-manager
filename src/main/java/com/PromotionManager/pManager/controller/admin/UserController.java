@@ -28,6 +28,14 @@ public class UserController {
         return userAccountService.getAllUsers();
     }
 
+    @GetMapping("/single-user")
+    public ResponseEntity<?> getSingleUser(@RequestParam Long userId){
+        log.info("Get single user userId : {}", userId);
+        return userAccountService.getSingleUser(userId);
+    }
+
+
+
     @PostMapping("/update-user")
     public ResponseEntity<?> updateUserAccount(@RequestBody UserAccountReqDto reqDto, @RequestParam Long userId){
         log.info("Update req for user Account, userId: {}", userId);
