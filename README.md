@@ -21,5 +21,6 @@ A simple application for managing promotions, built using modern Java technologi
 ## API Documentation
 Explore the complete API documentation here:  
 [API Documentation on Postman](https://documenter.getpostman.com/view/25541524/2sAYQXoCm4)
+(In First step, you can user Admin's username & Password as "ashan")
 
 
